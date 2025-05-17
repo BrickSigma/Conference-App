@@ -3,6 +3,7 @@ import 'package:conference_app/models/login_provider.dart';
 import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/views/app/app.dart';
 import 'package:conference_app/views/login/login.dart';
+import 'package:conference_app/views/login/verify_account.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<LoginProvider>(context, listen: false).getAuthState();
+
     return MaterialApp(
       themeMode: ThemeMode.system,
       theme: ThemeData(
@@ -48,7 +51,11 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Consumer<LoginProvider>(
         builder: (context, auth, child) {
-          return auth.loggedIn ? App() : LoginView();
+          return !auth.loggedIn
+              ? LoginView()
+              : auth.isVerified != true
+              ? VerifyAccountView()
+              : App();
         },
       ),
     );

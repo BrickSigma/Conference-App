@@ -44,7 +44,7 @@ class _SignupViewState extends State<SignupView> {
           _userNameController.text,
           _emailController.text,
         );
-        loginProvider.login();
+        loginProvider.login(credentials.user!.emailVerified);
         
         if (context.mounted) {
           Navigator.pop(context);

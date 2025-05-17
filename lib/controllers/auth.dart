@@ -43,7 +43,7 @@ Future<bool> googleSignIn(BuildContext context) async {
       credentials.user!.displayName ?? "",
       credentials.user!.email ?? "",
     );
-    loginState.login();
+    loginState.login(credentials.user!.emailVerified);
 
     return true;
   } catch (e) {

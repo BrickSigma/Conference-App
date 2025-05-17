@@ -43,7 +43,7 @@ class _LoginViewState extends State<LoginView> {
           _emailController.text, // TODO: Remove this later
           _emailController.text,
         );
-        loginProvider.login();
+        loginProvider.login(credentials.user!.emailVerified);
       } on FirebaseAuthException catch (e) {
         if (!context.mounted) {
           return;

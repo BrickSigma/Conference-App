@@ -10,8 +10,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     UserModel user = Provider.of<UserModel>(context, listen: false);
 
-    print(user.userInfo!.emailVerified);
-
     return Scaffold(
       body: Center(
         child: Column(

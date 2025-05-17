@@ -8,7 +8,7 @@ class UserModel extends ChangeNotifier {
   String userName = "";
   String email = "";
 
-  /// Initialize the user model data
+  /// Initialize the user model data for the first time.
   void init(User userInfo, String userName, String email) {
     this.userInfo = userInfo;
     this.userName = userName;
