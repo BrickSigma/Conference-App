@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordView extends StatefulWidget {
@@ -50,13 +51,19 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               ),
               SizedBox(height: 12),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Email sent! Please check your inbox."),
-                      ),
+                    await FirebaseAuth.instance.sendPasswordResetEmail(
+                      email: _emailController.text,
                     );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Email sent! Please check your inbox."),
+                        ),
+                      );
+                    }
                   }
                 },
                 child: Text("Send password reset email"),
