@@ -45,7 +45,7 @@ class _SignupViewState extends State<SignupView> {
           _emailController.text,
         );
         loginProvider.login(credentials.user!.emailVerified);
-        
+
         if (context.mounted) {
           Navigator.pop(context);
         }
@@ -54,19 +54,29 @@ class _SignupViewState extends State<SignupView> {
           return;
         }
         if (e.code == 'weak-password') {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text("Password is too weak")));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Password is too weak",
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
         } else if (e.code == 'email-already-in-use') {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("This email is already in use")),
+            SnackBar(
+              content: Text(
+                "This email is already in use",
+                textAlign: TextAlign.center,
+              ),
+            ),
           );
         }
       } catch (e) {
         if (context.mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(e.toString())));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString(), textAlign: TextAlign.center)),
+          );
         }
       }
     }

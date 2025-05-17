@@ -60,7 +60,10 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text("Email sent! Please check your inbox."),
+                          content: Text(
+                            "Email sent! Please check your inbox.",
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       );
                     }
