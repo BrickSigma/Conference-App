@@ -1,0 +1,3 @@
+List of things to do when deploying
+===================================
+Set the SHA Key for firebase and android to the release version: https://developers.google.com/android/guides/client-auth

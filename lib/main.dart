@@ -1,6 +1,6 @@
 import 'package:conference_app/firebase_options.dart';
-import 'package:conference_app/models/auth_provider.dart';
-import 'package:conference_app/models/user_provider.dart';
+import 'package:conference_app/models/login_provider.dart';
+import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/views/app/app.dart';
 import 'package:conference_app/views/login/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,8 +13,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => UserModel()),
       ],
       child: const MainApp(),
     ),
@@ -46,7 +46,7 @@ class MainApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: Consumer<AuthProvider>(
+      home: Consumer<LoginProvider>(
         builder: (context, auth, child) {
           return auth.loggedIn ? App() : LoginView();
         },
