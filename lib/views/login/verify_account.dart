@@ -26,7 +26,6 @@ class _VerifyAccountViewState extends State<VerifyAccountView> {
 
     UserModel user = Provider.of<UserModel>(context, listen: false);
 
-    
     // Send the email.
     await user.userInfo!.sendEmailVerification();
   }
@@ -63,14 +62,14 @@ class _VerifyAccountViewState extends State<VerifyAccountView> {
                     "Didn't get the email? Click bellow to resend it.",
                   ),
                 ),
-              ElevatedButton(
+              FilledButton(
                 onPressed: () => sendVerificationEmail(context),
                 child: Text(
                   _waitingVerification ? "Resend email" : "Verify email",
                 ),
               ),
               SizedBox(height: 12),
-              ElevatedButton(
+              FilledButton(
                 onPressed: () {
                   setState(() {
                     _waitingVerification = false;

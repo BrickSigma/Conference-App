@@ -1,3 +1,4 @@
+import 'package:conference_app/views/components/stacked_background.dart';
 import 'package:flutter/material.dart';
 
 class ScheduleData {
@@ -54,7 +55,7 @@ List<Day> scheduleCalendar = [
   Day("June 20th", [
     ScheduleData(
       "Parallel paper presentation sessions",
-      "9:00",
+      "09:00",
       "1 hour 30 minutes",
     ),
     ScheduleData("Closing ceremony", "11:00", "2 hours"),
@@ -82,10 +83,12 @@ class _ScheduleViewState extends State<ScheduleView> {
             tabs: [for (Day day in scheduleCalendar) Tab(text: day.date)],
           ),
         ),
-        body: TabBarView(
-          children: [
-            for (Day day in scheduleCalendar) ScheduleList(day.scheduleData),
-          ],
+        body: StackedBackground(
+          child: TabBarView(
+            children: [
+              for (Day day in scheduleCalendar) ScheduleList(day.scheduleData),
+            ],
+          ),
         ),
       ),
     );
@@ -111,23 +114,23 @@ class ScheduleList extends StatelessWidget {
                 children: [
                   SizedBox(
                     height: 100,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 6, child: VerticalDivider()),
-                        SizedBox(
-                          width: 100,
-                          child: Padding(
-                            padding: const EdgeInsets.all(6),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 6, child: VerticalDivider()),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
                             child: Text(
                               schedule.time,
                               textAlign: TextAlign.center,
                             ),
                           ),
-                        ),
-                        if (schedule != data.last)
-                          Expanded(child: VerticalDivider()),
-                      ],
+                          if (schedule != data.last)
+                            Expanded(child: VerticalDivider()),
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(child: ScheduleCard(schedule)),
@@ -149,10 +152,6 @@ class ScheduleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).colorScheme.onSecondaryContainer,
-          width: 2,
-        ),
         borderRadius: BorderRadius.circular(6),
         color: Theme.of(context).colorScheme.secondaryContainer,
       ),

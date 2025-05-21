@@ -130,7 +130,7 @@ class _LoginViewState extends State<LoginView> {
                       },
                     ),
                     SizedBox(height: 12),
-                    ElevatedButton(
+                    FilledButton(
                       onPressed: () => signIn(context),
                       child: Text("Login"),
                     ),

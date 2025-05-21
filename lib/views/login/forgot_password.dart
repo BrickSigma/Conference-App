@@ -50,7 +50,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 ),
               ),
               SizedBox(height: 12),
-              ElevatedButton(
+              FilledButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     await FirebaseAuth.instance.sendPasswordResetEmail(

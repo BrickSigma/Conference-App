@@ -169,7 +169,7 @@ class _SignupViewState extends State<SignupView> {
                       },
                     ),
                     SizedBox(height: 12),
-                    ElevatedButton(
+                    FilledButton(
                       onPressed: () => createAccount(context),
                       child: Text("Sign up"),
                     ),
