@@ -1,31 +1,36 @@
-import 'package:conference_app/models/login_provider.dart';
-import 'package:conference_app/models/user_model.dart';
+import 'package:conference_app/views/app/home.dart';
+import 'package:conference_app/views/app/schedule.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    UserModel user = Provider.of<UserModel>(context, listen: false);
+  State<App> createState() => _AppState();
+}
 
+class _AppState extends State<App> {
+  final List<Widget> _pages = [HomeView(), ScheduleView()];
+  int _pageIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Hello ${user.userName}!"),
-            Consumer<LoginProvider>(
-              builder:
-                  (context, auth, child) => ElevatedButton(
-                    onPressed: () => auth.logout(),
-                    child: Text("Logout"),
-                  ),
-            ),
-          ],
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: "Schedule",
+          ),
+        ],
+        currentIndex: _pageIndex,
+        onTap:
+            (value) => setState(() {
+              _pageIndex = value;
+            }),
       ),
+      body: _pages[_pageIndex],
     );
   }
 }
