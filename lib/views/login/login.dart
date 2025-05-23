@@ -83,111 +83,117 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.account_circle_outlined, size: 160),
-              Text("Login", style: Theme.of(context).textTheme.headlineMedium),
-              Divider(height: 24),
-              Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.account_circle_outlined, size: 160),
+                Text(
+                  "Login",
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                Divider(height: 24),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "Email",
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter an email';
+                          } else if (!EmailValidator.validate(value)) {
+                            return 'Please enter a valid email address';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 12),
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        autocorrect: false,
+                        enableSuggestions: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "Password",
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 12),
+                      FilledButton(
+                        onPressed: () => signIn(context),
+                        child: Text("Login"),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ForgotPasswordView(),
+                        ),
+                      ),
+                  child: Text("Forgotten password?"),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Email",
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an email';
-                        } else if (!EmailValidator.validate(value)) {
-                          return 'Please enter a valid email address';
-                        }
-                        return null;
-                      },
+                    Expanded(child: Divider()),
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Text("or"),
                     ),
-                    SizedBox(height: 12),
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      autocorrect: false,
-                      enableSuggestions: false,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Password",
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 12),
-                    FilledButton(
-                      onPressed: () => signIn(context),
-                      child: Text("Login"),
-                    ),
+                    Expanded(child: Divider()),
                   ],
                 ),
-              ),
-              SizedBox(height: 12),
-              TextButton(
-                onPressed:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ForgotPasswordView(),
-                      ),
+                GestureDetector(
+                  onTap: () => googleSignIn(context),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3),
+                      color: Theme.of(context).colorScheme.primaryContainer,
                     ),
-                child: Text("Forgotten password?"),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(child: Divider()),
-                  Padding(padding: const EdgeInsets.all(12), child: Text("or")),
-                  Expanded(child: Divider()),
-                ],
-              ),
-              SizedBox(height: 12),
-              GestureDetector(
-                onTap: () => googleSignIn(context),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(3),
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FaIcon(FontAwesomeIcons.google, size: 20),
-                        SizedBox(width: 12),
-                        Text("Sign in with Google"),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FaIcon(FontAwesomeIcons.google, size: 20),
+                          SizedBox(width: 12),
+                          Text("Sign in with Google"),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 12),
-              TextButton(
-                onPressed:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignupView()),
-                    ),
-                child: Text("Don't have an account? Create a new one."),
-              ),
-            ],
+                TextButton(
+                  onPressed:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignupView()),
+                      ),
+                  child: Text("Don't have an account? Create a new one."),
+                ),
+              ],
+            ),
           ),
         ),
       ),
