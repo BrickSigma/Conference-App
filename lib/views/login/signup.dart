@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conference_app/controllers/auth.dart';
 import 'package:conference_app/models/login_provider.dart';
+import 'package:conference_app/models/user_model.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,10 +39,10 @@ class _SignupViewState extends State<SignupView> {
             );
 
         // Save the user to the database.
-        final db = FirebaseFirestore.instance;
-        await db.collection("users").doc(credentials.user!.uid).set({
-          "username": _userNameController.text,
-        });
+        await UserModel.createUserDocument(
+          credentials.user!.uid,
+          _userNameController.text,
+        );
 
         loginProvider.login(credentials.user!.emailVerified);
 

@@ -3,7 +3,7 @@ library;
 
 import 'dart:async';
 import 'package:conference_app/models/login_provider.dart';
-import 'package:conference_app/models/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,10 +24,8 @@ class _VerifyAccountViewState extends State<VerifyAccountView> {
       _waitingVerification = true;
     });
 
-    UserModel user = Provider.of<UserModel>(context, listen: false);
-
     // Send the email.
-    await user.userInfo!.sendEmailVerification();
+    await FirebaseAuth.instance.currentUser!.sendEmailVerification();
   }
 
   @override

@@ -4,6 +4,7 @@ library;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conference_app/models/login_provider.dart';
+import 'package:conference_app/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -41,10 +42,10 @@ Future<bool> googleSignIn(BuildContext context) async {
 
     // If no data exists for the user, add it to the database.
     if (!data.exists) {
-      await db.collection("users").doc(credentials.user!.uid).set({
-        "username":
-            credentials.user!.displayName ?? credentials.user!.email ?? "",
-      });
+      await UserModel.createUserDocument(
+        credentials.user!.uid,
+        credentials.user!.displayName ?? credentials.user!.email ?? "",
+      );
     }
 
     loginState.login(credentials.user!.emailVerified);

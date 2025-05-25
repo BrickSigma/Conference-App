@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conference_app/models/login_provider.dart';
 import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/views/app/account.dart';
@@ -29,22 +28,8 @@ class _AppState extends State<App> {
 
   /// Used to load the user data from firebase.
   Future<UserModel> _getUserData() async {
-    final db = FirebaseFirestore.instance;
-    User currentUser;
-    try {
-      currentUser = FirebaseAuth.instance.currentUser!;
-    } on Exception {
-      throw "User is signed out!";
-    }
-
-    String uid = currentUser.uid;
-    DocumentSnapshot<Map<String, dynamic>> data =
-        await db.collection("users").doc(uid).get();
-
     UserModel user = UserModel();
-    user.userInfo = currentUser;
-    user.email = currentUser.email!;
-    user.userName = data.data()!["username"];
+    await user.loadUserData(FirebaseAuth.instance.currentUser!);
 
     return user;
   }
@@ -102,6 +87,7 @@ class _AppState extends State<App> {
             child = Scaffold(
               body: Center(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.error, size: 160),
                     SizedBox(height: 12),
