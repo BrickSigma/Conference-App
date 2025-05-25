@@ -26,7 +26,7 @@ class LoginProvider extends ChangeNotifier {
   }
 
   /// Logs in a user.
-  Future<void> login(bool isVerified) async {
+  void login(bool isVerified) {
     _loggedIn = true;
     _isVerified = isVerified;
     notifyListeners();

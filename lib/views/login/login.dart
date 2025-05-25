@@ -1,6 +1,5 @@
 import 'package:conference_app/controllers/auth.dart';
 import 'package:conference_app/models/login_provider.dart';
-import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/views/login/forgot_password.dart';
 import 'package:conference_app/views/login/signup.dart';
 import 'package:email_validator/email_validator.dart';
@@ -28,7 +27,6 @@ class _LoginViewState extends State<LoginView> {
           context,
           listen: false,
         );
-        UserModel user = Provider.of<UserModel>(context, listen: false);
 
         final credentials = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
@@ -36,13 +34,6 @@ class _LoginViewState extends State<LoginView> {
               password: _passwordController.text,
             );
 
-        // TODO: Fetch user details from database
-
-        user.init(
-          credentials.user!,
-          _emailController.text, // TODO: Remove this later
-          _emailController.text,
-        );
         loginProvider.login(credentials.user!.emailVerified);
       } on FirebaseAuthException catch (e) {
         if (!context.mounted) {
@@ -83,10 +74,10 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Center(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

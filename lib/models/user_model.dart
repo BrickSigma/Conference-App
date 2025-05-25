@@ -16,8 +16,9 @@ class UserModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Loads user data from database.
-  Future<void> loadUserData() async {
-    // TODO: Implement functionality
+  void copyFrom(UserModel user) {
+    userInfo = user.userInfo;
+    email = user.email;
+    userName = user.userName;
   }
 }

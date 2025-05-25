@@ -2,15 +2,12 @@
 /// signing in with Google, etc...
 library;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conference_app/models/login_provider.dart';
-import 'package:conference_app/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-/// Adds the user details to the database.
-void addUserToDatabase(User user) async {}
 
 /// Signs in a user using the Google API.
 Future<bool> googleSignIn(BuildContext context) async {
@@ -19,7 +16,6 @@ Future<bool> googleSignIn(BuildContext context) async {
       context,
       listen: false,
     );
-    UserModel user = Provider.of<UserModel>(context, listen: false);
 
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -38,11 +34,19 @@ Future<bool> googleSignIn(BuildContext context) async {
     UserCredential credentials = await FirebaseAuth.instance
         .signInWithCredential(credential);
 
-    user.init(
-      credentials.user!,
-      credentials.user!.displayName ?? "",
-      credentials.user!.email ?? "",
-    );
+    // Check if the user has registered before.
+    final db = FirebaseFirestore.instance;
+    DocumentSnapshot<Map<String, dynamic>> data =
+        await db.collection("users").doc(credentials.user!.uid).get();
+
+    // If no data exists for the user, add it to the database.
+    if (!data.exists) {
+      await db.collection("users").doc(credentials.user!.uid).set({
+        "username":
+            credentials.user!.displayName ?? credentials.user!.email ?? "",
+      });
+    }
+
     loginState.login(credentials.user!.emailVerified);
 
     return true;

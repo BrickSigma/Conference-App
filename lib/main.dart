@@ -6,6 +6,7 @@ import 'package:conference_app/views/login/login.dart';
 import 'package:conference_app/views/login/verify_account.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -24,6 +25,7 @@ void main() async {
 
 Future<void> setupApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 

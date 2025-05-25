@@ -10,7 +10,7 @@ class HomeView extends StatelessWidget {
     final currentTime = DateTime.now();
     if (currentTime.hour < 12) {
       return "Good morning ${username ?? ""}";
-    } else if (currentTime.hour < 6) {
+    } else if (currentTime.hour < 18) {
       return "Good afternoon ${username ?? ""}";
     } else {
       return "Good evening ${username ?? ""}";
