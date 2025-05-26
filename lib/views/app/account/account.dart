@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:conference_app/models/login_provider.dart';
 import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/views/app/account/edit_account.dart';
@@ -5,6 +7,7 @@ import 'package:conference_app/views/components/stacked_background.dart';
 import 'package:flutter/material.dart';
 import 'package:hyperlink/hyperlink.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccountView extends StatelessWidget {
@@ -102,6 +105,28 @@ class AccountView extends StatelessWidget {
                               ],
                             ),
                           ),
+                        SizedBox(height: 12),
+                        Text(
+                          "Scan my profile:",
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        SizedBox(height: 12),
+                        ClipRRect(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                            child: QrImageView(
+                              data: user.userInfo?.uid ?? "",
+                              eyeStyle: QrEyeStyle(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                eyeShape: QrEyeShape.square,
+                              ),
+                              dataModuleStyle: QrDataModuleStyle(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                dataModuleShape: QrDataModuleShape.square,
+                              ),
+                            ),
+                          ),
+                        ),
                         SizedBox(height: 12),
                         Center(
                           child: Consumer<LoginProvider>(
