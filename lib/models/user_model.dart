@@ -84,7 +84,7 @@ class UserModel extends ChangeNotifier {
 
     Map<String, dynamic> data = {
       "username": this.userName,
-      "email" : email,
+      "email": email,
       "bio": this.bio,
       "links": this.links,
       "contacts": contacts,
@@ -97,9 +97,25 @@ class UserModel extends ChangeNotifier {
 
   /// Adds a new contact to the contacts list,
   /// both in memory and in Firebase.
-  Future<void> addContact() async {}
+  Future<void> addContact(String uid, String userName) async {
+    contacts.add({"uid": uid, "username": userName});
+
+    final db = FirebaseFirestore.instance;
+    await db.collection("users").doc(userInfo!.uid).update({
+      "contacts": contacts,
+    });
+    notifyListeners();
+  }
 
   /// Removes a contact from the contacts list,
   /// both in memory and in Firebase.
-  Future<void> removeContact() async {}
+  Future<void> removeContact(String uid) async {
+    contacts.removeWhere((element) => element["uid"] == uid);
+
+    final db = FirebaseFirestore.instance;
+    await db.collection("users").doc(userInfo!.uid).update({
+      "contacts": contacts,
+    });
+    notifyListeners();
+  }
 }

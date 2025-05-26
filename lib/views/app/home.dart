@@ -1,10 +1,25 @@
 import 'package:conference_app/models/user_model.dart';
+import 'package:conference_app/views/components/qr_code_scan.dart';
 import 'package:conference_app/views/components/stacked_background.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
+
+  void _showQrCodeScanner(BuildContext context) {
+    showMaterialModalBottomSheet(
+      context: context,
+      builder:
+          (context) => Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: QrCodeScanView(),
+          ),
+    );
+  }
 
   String _dailyMessage(String? username) {
     final currentTime = DateTime.now();
@@ -54,7 +69,7 @@ class HomeView extends StatelessWidget {
                   Row(
                     children: [
                       FilledButton.icon(
-                        onPressed: () {},
+                        onPressed: () => _showQrCodeScanner(context),
                         label: Text("QR Code Connect"),
                         icon: Icon(Icons.qr_code_scanner_rounded),
                       ),

@@ -3,6 +3,7 @@ import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/views/components/stacked_background.dart';
 import 'package:flutter/material.dart';
 import 'package:hyperlink/hyperlink.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactDetailsView extends StatefulWidget {
@@ -58,7 +59,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
         Widget child;
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            child = ContactDetails(snapshot.data!);
+            child = ContactDetails(widget.uid, snapshot.data!);
           } else {
             child = Scaffold(
               appBar: AppBar(),
@@ -94,9 +95,10 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
 }
 
 class ContactDetails extends StatefulWidget {
-  const ContactDetails(this.user, {super.key});
+  const ContactDetails(this.uid, this.user, {super.key});
 
   final UserModel user;
+  final String uid;
 
   @override
   State<ContactDetails> createState() => _ContactDetailsState();
@@ -121,7 +123,31 @@ class _ContactDetailsState extends State<ContactDetails> {
     UserModel user = widget.user;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          Consumer<UserModel>(
+            builder: (context, currentUser, child) {
+              bool contactSaved = currentUser.contacts.any(
+                (element) => element["uid"] == widget.uid,
+              );
+
+              return TextButton.icon(
+                onPressed: () async {
+                  if (contactSaved) {
+                    await currentUser.removeContact(widget.uid);
+                  } else {
+                    await currentUser.addContact(widget.uid, user.userName);
+                  }
+                },
+                label: Text(contactSaved ? "Remove" : "Save"),
+                icon: Icon(
+                  contactSaved ? Icons.bookmark : Icons.bookmark_outline,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: StackedBackground(
         child: SafeArea(
           child: SingleChildScrollView(
