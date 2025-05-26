@@ -1,6 +1,6 @@
 import 'package:conference_app/models/login_provider.dart';
 import 'package:conference_app/models/user_model.dart';
-import 'package:conference_app/views/app/account.dart';
+import 'package:conference_app/views/app/account/account.dart';
 import 'package:conference_app/views/app/connections.dart';
 import 'package:conference_app/views/app/home.dart';
 import 'package:conference_app/views/app/schedule.dart';
@@ -16,14 +16,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final List<Widget> _pages = [
-    HomeView(),
-    ScheduleView(),
-    ConnectionsView(),
-    AccountView(),
-  ];
-  int _pageIndex = 0;
-
   Future<UserModel>? _data;
 
   /// Used to load the user data from firebase.
@@ -54,35 +46,7 @@ class _AppState extends State<App> {
           if (snapshot.hasData) {
             userModel.copyFrom(snapshot.data!);
 
-            child = Scaffold(
-              bottomNavigationBar: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: "Home",
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.calendar_month),
-                    label: "Schedule",
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.people_outlined),
-                    label: "Connections",
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.account_circle_outlined),
-                    label: "Account",
-                  ),
-                ],
-                currentIndex: _pageIndex,
-                onTap:
-                    (value) => setState(() {
-                      _pageIndex = value;
-                    }),
-              ),
-              body: _pages[_pageIndex],
-            );
+            child = AppNavigation();
           } else {
             child = Scaffold(
               body: Center(
@@ -115,6 +79,53 @@ class _AppState extends State<App> {
         }
         return child;
       },
+    );
+  }
+}
+
+class AppNavigation extends StatefulWidget {
+  const AppNavigation({super.key});
+
+  @override
+  State<AppNavigation> createState() => _AppNavigationState();
+}
+
+class _AppNavigationState extends State<AppNavigation> {
+  final List<Widget> _pages = [
+    HomeView(),
+    ScheduleView(),
+    ConnectionsView(),
+    AccountView(),
+  ];
+  int _pageIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: "Schedule",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people_outlined),
+            label: "Connections",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_outlined),
+            label: "Account",
+          ),
+        ],
+        currentIndex: _pageIndex,
+        onTap:
+            (value) => setState(() {
+              _pageIndex = value;
+            }),
+      ),
+      body: _pages[_pageIndex],
     );
   }
 }

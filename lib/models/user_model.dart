@@ -41,8 +41,18 @@ class UserModel extends ChangeNotifier {
     userInfo = currentUser;
     userName = data["username"] ?? currentUser.email ?? "";
     bio = data["bio"] ?? "";
-    links = List<Map<String, String>>.from(data["links"] ?? []);
-    contacts = List<Map<String, String>>.from(data["contacts"] ?? []);
+    if (data["links"] != null) {
+      links =
+          List.from(
+            data["links"],
+          ).map((e) => Map<String, String>.from(e)).toList();
+    }
+    if (data["contacts"] != null) {
+      contacts =
+          List.from(
+            data["contacts"],
+          ).map((e) => Map<String, String>.from(e)).toList();
+    }
   }
 
   /// Copy user data from one object to this one.
@@ -50,7 +60,37 @@ class UserModel extends ChangeNotifier {
     userInfo = user.userInfo;
     userName = user.userName;
     bio = user.bio;
-    links = user.links;
-    contacts = user.contacts;
+    links = user.links.map((e) => Map<String, String>.from(e)).toList();
+    contacts = user.contacts.map((e) => Map<String, String>.from(e)).toList();
   }
+
+  /// Saves the user account information after editing the user profile.
+  Future<void> updateUserData(
+    String userName,
+    String bio,
+    List<Map<String, String>> links,
+  ) async {
+    this.userName = userName;
+    this.bio = bio;
+    this.links = links.map((e) => Map<String, String>.from(e)).toList();
+
+    Map<String, dynamic> data = {
+      "username": this.userName,
+      "bio": this.bio,
+      "links": this.links,
+      "contacts": contacts,
+    };
+
+    final db = FirebaseFirestore.instance;
+    await db.collection("users").doc(userInfo!.uid).set(data);
+    notifyListeners();
+  }
+
+  /// Adds a new contact to the contacts list,
+  /// both in memory and in Firebase.
+  Future<void> addContact() async {}
+
+  /// Removes a contact from the contacts list,
+  /// both in memory and in Firebase.
+  Future<void> removeContact() async {}
 }
