@@ -18,10 +18,16 @@ class _EditAccountViewState extends State<EditAccountView> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void addLink() {
+  void addLink(BuildContext context) {
     showMaterialModalBottomSheet(
       context: context,
-      builder: (context) => AddLinkBottomSheet(_links),
+      builder:
+          (context) => Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: AddLinkBottomSheet(_links),
+          ),
     );
   }
 
@@ -157,7 +163,7 @@ class _EditAccountViewState extends State<EditAccountView> {
                     },
                   ),
                   FilledButton.icon(
-                    onPressed: () => addLink(),
+                    onPressed: () => addLink(context),
                     label: Text("Add a new link"),
                     icon: Icon(Icons.add_link),
                   ),

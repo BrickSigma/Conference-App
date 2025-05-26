@@ -42,6 +42,7 @@ class _SignupViewState extends State<SignupView> {
         await UserModel.createUserDocument(
           credentials.user!.uid,
           _userNameController.text,
+          _emailController.text,
         );
 
         loginProvider.login(credentials.user!.emailVerified);

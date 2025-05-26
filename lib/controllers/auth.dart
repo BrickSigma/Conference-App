@@ -45,6 +45,7 @@ Future<bool> googleSignIn(BuildContext context) async {
       await UserModel.createUserDocument(
         credentials.user!.uid,
         credentials.user!.displayName ?? credentials.user!.email ?? "",
+        credentials.user!.email ?? "",
       );
     }
 

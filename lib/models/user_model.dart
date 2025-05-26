@@ -8,14 +8,20 @@ class UserModel extends ChangeNotifier {
   User? userInfo;
   String userName = "";
   String bio = "";
+  String email = "";
   List<Map<String, String>> links = [];
   List<Map<String, String>> contacts = [];
 
   /// Creates a new document entry for the user.
-  static Future<void> createUserDocument(String uid, String userName) async {
+  static Future<void> createUserDocument(
+    String uid,
+    String userName,
+    String email,
+  ) async {
     final db = FirebaseFirestore.instance;
     Map<String, dynamic> data = {
       "username": userName,
+      "email": email,
       "bio": "",
       "links": [],
       "contacts": [],
@@ -40,6 +46,7 @@ class UserModel extends ChangeNotifier {
 
     userInfo = currentUser;
     userName = data["username"] ?? currentUser.email ?? "";
+    email = data["email"] ?? currentUser.email ?? "";
     bio = data["bio"] ?? "";
     if (data["links"] != null) {
       links =
@@ -59,6 +66,7 @@ class UserModel extends ChangeNotifier {
   void copyFrom(UserModel user) {
     userInfo = user.userInfo;
     userName = user.userName;
+    email = user.email;
     bio = user.bio;
     links = user.links.map((e) => Map<String, String>.from(e)).toList();
     contacts = user.contacts.map((e) => Map<String, String>.from(e)).toList();
@@ -76,6 +84,7 @@ class UserModel extends ChangeNotifier {
 
     Map<String, dynamic> data = {
       "username": this.userName,
+      "email" : email,
       "bio": this.bio,
       "links": this.links,
       "contacts": contacts,
