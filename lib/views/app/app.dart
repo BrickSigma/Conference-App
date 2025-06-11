@@ -1,4 +1,5 @@
 import 'package:conference_app/models/login_provider.dart';
+import 'package:conference_app/models/schedule_provider.dart';
 import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/views/app/account/account.dart';
 import 'package:conference_app/views/app/connections.dart';
@@ -16,14 +17,17 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  Future<UserModel>? _data;
+  Future<(UserModel, ScheduleProvider)>? _data;
 
   /// Used to load the user data from firebase.
-  Future<UserModel> _getUserData() async {
+  Future<(UserModel, ScheduleProvider)> _getUserData() async {
     UserModel user = UserModel();
     await user.loadUserData(FirebaseAuth.instance.currentUser!);
 
-    return user;
+    ScheduleProvider schedule = ScheduleProvider();
+    await schedule.loadSchedule();
+
+    return (user, schedule);
   }
 
   @override
@@ -41,10 +45,12 @@ class _AppState extends State<App> {
 
         LoginProvider loginProvider = Provider.of(context, listen: false);
         UserModel userModel = Provider.of(context, listen: false);
+        ScheduleProvider scheduleProvider = Provider.of(context, listen: false);
 
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            userModel.copyFrom(snapshot.data!);
+            userModel.copyFrom(snapshot.data!.$1);
+            scheduleProvider.copyFrom(snapshot.data!.$2);
 
             child = AppNavigation();
           } else {

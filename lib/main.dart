@@ -1,5 +1,6 @@
 import 'package:conference_app/firebase_options.dart';
 import 'package:conference_app/models/login_provider.dart';
+import 'package:conference_app/models/schedule_provider.dart';
 import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/views/app/app.dart';
 import 'package:conference_app/views/login/login.dart';
@@ -17,6 +18,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => UserModel()),
+        ChangeNotifierProvider(create: (_) => ScheduleProvider()),
       ],
       child: const MainApp(),
     ),
