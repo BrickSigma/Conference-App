@@ -30,23 +30,62 @@ class ScheduleProvider extends ChangeNotifier {
           data["end"],
           data["isSession"] ?? false,
         );
+
+        String id = docSnapshot.id;
+
+        // Load the session information for a schedule
+        if (schedule.isSession) {
+          final QuerySnapshot sessionQuery =
+              await db
+                  .collection("schedule")
+                  .doc(id)
+                  .collection("sessions")
+                  .get();
+
+          List<SessionModel> sessions = [];
+
+          for (QueryDocumentSnapshot documentSnapshot in sessionQuery.docs) {
+            final Map<String, String> data = Map<String, String>.from(
+              documentSnapshot.data()! as Map<String, dynamic>,
+            );
+
+            int index = sessions.indexWhere(
+              (element) => element.title == data["session"]!,
+            );
+            if (index != -1) {
+              sessions[index].activities.add(
+                SessionActivity(data["topic"] ?? "", data["speaker"] ?? ""),
+              );
+            } else {
+              sessions.add(SessionModel(data["session"] ?? ""));
+              sessions.last.activities.add(
+                SessionActivity(data["topic"] ?? "", data["speaker"] ?? ""),
+              );
+            }
+          }
+
+          sessions.sort((a, b) => a.title.compareTo(b.title));
+          for (SessionModel element in sessions) {
+            schedule.sessions.add(element);
+          }
+        }
+
         schedules.add(schedule);
         DateTime date = DateUtils.dateOnly(schedule.start.toDate());
         if (!dates.contains(date)) {
           dates.add(date);
         }
       } on Exception {
-        continue;
+        throw Exception("Could not load schedule!");
       }
     }
 
+    schedules.sort((a, b) => a.start.compareTo(b.start));
     dates.sort((a, b) => a.compareTo(b));
     if (dates.isNotEmpty) {
       startDate = dates.first;
       endDate = dates.last;
     }
-    print(startDate);
-    print(endDate);
   }
 
   /// Copies data from on schedule provider to this instance.
@@ -84,24 +123,21 @@ class ScheduleModel {
 
   String get durationText => _getDurationText();
 
-  ScheduleModel(
-    this.title,
-    this.start,
-    this.end,
-    this.isSession, {
-    this.sessions = const [],
-  });
+  ScheduleModel(this.title, this.start, this.end, this.isSession);
 }
 
 /// Contains information about a session.
 class SessionModel {
-  String id = "";
   String title = "";
   List<SessionActivity> activities = [];
+
+  SessionModel(this.title);
 }
 
 /// Represents a single activity in a session.
 class SessionActivity {
   String topic = "";
   String speaker = "";
+
+  SessionActivity(this.topic, this.speaker);
 }
