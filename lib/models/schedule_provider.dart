@@ -97,6 +97,17 @@ class ScheduleProvider extends ChangeNotifier {
     endDate = schedule.endDate;
     dates = schedule.dates.toList();
   }
+
+  /// Gets the schedule list for a specified day.
+  List<ScheduleModel> getScheduleForDate(DateTime date) {
+    return schedules
+        .where(
+          (element) =>
+              DateUtils.dateOnly(element.start.toDate()) ==
+              DateUtils.dateOnly(date),
+        )
+        .toList();
+  }
 }
 
 /// Contains the schedules for each day.
