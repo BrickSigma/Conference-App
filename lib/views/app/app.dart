@@ -4,7 +4,7 @@ import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/views/app/account/account.dart';
 import 'package:conference_app/views/app/connections.dart';
 import 'package:conference_app/views/app/home.dart';
-import 'package:conference_app/views/app/schedule.dart';
+import 'package:conference_app/views/app/schedule/schedule.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

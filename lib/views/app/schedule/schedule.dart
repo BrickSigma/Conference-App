@@ -1,5 +1,6 @@
 import 'package:conference_app/models/schedule_provider.dart';
 import 'package:conference_app/utils/utils.dart';
+import 'package:conference_app/views/app/schedule/session.dart';
 import 'package:conference_app/views/components/stacked_background.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +62,7 @@ class ScheduleList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 100,
+                    height: 120,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
                       child: Column(
@@ -98,25 +99,45 @@ class ScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-        color: Theme.of(context).colorScheme.secondaryContainer,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(data.title),
-            SizedBox(height: 6),
-            Text(
-              "Duration: ${data.durationText}",
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: Theme.of(context).colorScheme.tertiary,
+    return GestureDetector(
+      onTap:
+          data.isSession
+              ? () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SessionView(data.title, data.sessions),
+                ),
+              )
+              : null,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+          color: Theme.of(context).colorScheme.secondaryContainer,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(data.title),
+                    SizedBox(height: 6),
+                    Text(
+                      "Duration: ${data.durationText}",
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              if (data.isSession) Icon(Icons.arrow_forward_ios, size: 16),
+            ],
+          ),
         ),
       ),
     );
