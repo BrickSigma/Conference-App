@@ -30,6 +30,15 @@ class UserModel extends ChangeNotifier {
     await db.collection("users").doc(uid).set(data);
   }
 
+  /// Deletes the user's data and account from firebase.
+  Future<void> deleteAccount() async {
+    final db = FirebaseFirestore.instance;
+
+    await db.collection("users").doc(userInfo?.uid).delete();
+
+    await userInfo?.delete();
+  }
+
   /// Retrieves the user data from firebase.
   ///
   /// `currentUser` - FirebaseAuth User instance

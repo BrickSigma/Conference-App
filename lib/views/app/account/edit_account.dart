@@ -1,3 +1,4 @@
+import 'package:conference_app/models/login_provider.dart';
 import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/views/components/stacked_background.dart';
 import 'package:flutter/material.dart';
@@ -59,9 +60,46 @@ class _EditAccountViewState extends State<EditAccountView> {
     }
   }
 
+  void deleteAccount(
+    BuildContext context,
+    UserModel user,
+    LoginProvider loginProvider,
+  ) async {
+    bool? confirm = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(
+              "Confirm account deletion.",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+            content: Text("Are you sure you want to delete your account?"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: Text("Confirm"),
+              ),
+            ],
+          ),
+    );
+
+    if (confirm == true) {
+      user.deleteAccount();
+      loginProvider.logout();
+      if (context.mounted) Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    UserModel user = Provider.of(context);
+    UserModel user = Provider.of(context, listen: false);
+    LoginProvider loginProvider = Provider.of(context, listen: false);
 
     _userNameController.text = user.userName;
     _bioController.text = user.bio;
@@ -166,6 +204,17 @@ class _EditAccountViewState extends State<EditAccountView> {
                     onPressed: () => addLink(context),
                     label: Text("Add a new link"),
                     icon: Icon(Icons.add_link),
+                  ),
+                  SizedBox(height: 12),
+                  FilledButton(
+                    onPressed:
+                        () => deleteAccount(context, user, loginProvider),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                        Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                    child: Text("Delete Account"),
                   ),
                 ],
               ),
