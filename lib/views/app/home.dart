@@ -1,4 +1,6 @@
+import 'package:conference_app/models/schedule_provider.dart';
 import 'package:conference_app/models/user_model.dart';
+import 'package:conference_app/utils/utils.dart';
 import 'package:conference_app/views/components/qr_code_scan.dart';
 import 'package:conference_app/views/components/stacked_background.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +37,10 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserModel user = Provider.of<UserModel>(context, listen: false);
+    ScheduleProvider scheduleProvider = Provider.of(context, listen: false);
+    List<ScheduleModel> currentSchedules = scheduleProvider.getScheduleForDate(
+      DateTime.now(),
+    );
 
     return Scaffold(
       body: StackedBackground(
@@ -56,11 +62,23 @@ class HomeView extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: UpcommingSessionCard(),
-                  ),
-                  SizedBox(height: 12),
+                  if (currentSchedules.isNotEmpty)
+                    for (ScheduleModel schedule in currentSchedules)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ScheduleCard(schedule),
+                        ),
+                      ),
+                  if (currentSchedules.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: UpcommingSessionCard(),
+                      ),
+                    ),
                   Text(
                     "Quick actions",
                     style: Theme.of(context).textTheme.bodyLarge,
@@ -98,6 +116,38 @@ class UpcommingSessionCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Text("No sessions planned for today"),
+      ),
+    );
+  }
+}
+
+class ScheduleCard extends StatelessWidget {
+  final ScheduleModel data;
+
+  const ScheduleCard(this.data, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        color: Theme.of(context).colorScheme.secondaryContainer,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(data.title),
+            SizedBox(height: 6),
+            Text(
+              formatTime(data.start.toDate()),
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
