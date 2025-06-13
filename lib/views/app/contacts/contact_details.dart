@@ -53,6 +53,8 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel user = Provider.of(context, listen: false);
+
     return FutureBuilder(
       future: _data,
       builder: (context, snapshot) {
@@ -63,14 +65,35 @@ class _ContactDetailsViewState extends State<ContactDetailsView> {
           } else {
             child = Scaffold(
               appBar: AppBar(),
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error, size: 160),
-                    SizedBox(height: 12),
-                    Text("Could not load user information!"),
-                  ],
+              body: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error,
+                        size: 120,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                      SizedBox(height: 12),
+                      Text(
+                        "Could not load ${widget.userName}'s information!",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      FilledButton(
+                        onPressed: () {
+                          user.removeContact(widget.uid);
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Remove connection"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
