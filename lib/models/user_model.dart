@@ -34,9 +34,11 @@ class UserModel extends ChangeNotifier {
   Future<void> deleteAccount() async {
     final db = FirebaseFirestore.instance;
 
-    await db.collection("users").doc(userInfo?.uid).delete();
-
-    await userInfo?.delete();
+    db
+        .collection("users")
+        .doc(userInfo?.uid)
+        .delete()
+        .then((value) => print("Document deleted!"), onError: (e) => print(e));
   }
 
   /// Retrieves the user data from firebase.

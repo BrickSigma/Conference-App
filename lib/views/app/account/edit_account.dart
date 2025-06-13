@@ -1,6 +1,7 @@
 import 'package:conference_app/models/login_provider.dart';
 import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/views/components/stacked_background.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -90,6 +91,45 @@ class _EditAccountViewState extends State<EditAccountView> {
     );
 
     if (confirm == true) {
+      try {
+        await loginProvider.getAuthState()?.delete();
+      } on FirebaseAuthException {
+        if (context.mounted) {
+          int? status = await showDialog<int>(
+            context: context,
+            builder:
+                (context) => AlertDialog(
+                  title: Text(
+                    "Login Again",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                  content: Text(
+                    "You need to logout and login again to delete your account.",
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 1),
+                      child: Text("Cancel"),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 0),
+                      child: Text("Logout"),
+                    ),
+                  ],
+                ),
+          );
+
+          if (status == 0) {
+            loginProvider.logout();
+            if (context.mounted) Navigator.pop(context);
+            return;
+          }
+        }
+      }
+
+      // Only delete the use account data if the account was succesfully deleted.
       user.deleteAccount();
       loginProvider.logout();
       if (context.mounted) Navigator.pop(context);

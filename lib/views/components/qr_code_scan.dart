@@ -11,7 +11,12 @@ class QrCodeScanView extends StatefulWidget {
 }
 
 class _QrCodeScanViewState extends State<QrCodeScanView> {
+  bool _isHandlingScan = false;
+
   void _handleScan(BuildContext context, String? data) async {
+    if (_isHandlingScan) return;
+    _isHandlingScan = true;
+
     if (data == null) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -22,17 +27,28 @@ class _QrCodeScanViewState extends State<QrCodeScanView> {
       return;
     }
 
+    print(data);
+
     final db = FirebaseFirestore.instance;
     DocumentSnapshot<Map<String, dynamic>> document =
         await db.collection("users").doc(data).get();
 
-    if (!document.exists && context.mounted) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Couldn't scan QR code", textAlign: TextAlign.center),
-        ),
-      );
+    if (!document.exists) {
+      try {
+        if (context.mounted) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Couldn't scan QR code",
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+      } on Exception catch (e) {
+        print(e);
+      }
       return;
     }
 
@@ -66,7 +82,11 @@ class _QrCodeScanViewState extends State<QrCodeScanView> {
             height: 300,
             child: MobileScanner(
               fit: BoxFit.fitWidth,
-              onDetect: (barcodes) => _handleScan(context, barcodes.barcodes.first.displayValue),
+              onDetect:
+                  (barcodes) => _handleScan(
+                    context,
+                    barcodes.barcodes.first.displayValue,
+                  ),
             ),
           ),
         ],
