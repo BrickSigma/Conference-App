@@ -2,6 +2,7 @@ import 'package:conference_app/firebase_options.dart';
 import 'package:conference_app/models/login_provider.dart';
 import 'package:conference_app/models/schedule_provider.dart';
 import 'package:conference_app/models/user_model.dart';
+import 'package:conference_app/theme.dart';
 import 'package:conference_app/views/app/app.dart';
 import 'package:conference_app/views/login/login.dart';
 import 'package:conference_app/views/login/verify_account.dart';
@@ -40,18 +41,8 @@ class MainApp extends StatelessWidget {
 
     return MaterialApp(
       themeMode: ThemeMode.system,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.light,
-        ),
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.dark,
-        ),
-      ),
+      theme: ThemeData(colorScheme: MaterialTheme.lightScheme()),
+      darkTheme: ThemeData(colorScheme: MaterialTheme.darkScheme()),
       debugShowCheckedModeBanner: false,
       home: Consumer<LoginProvider>(
         builder: (context, auth, child) {
