@@ -13,6 +13,7 @@ dependencies:
   firebase_core: ^2.32.0
   flutter:
     sdk: flutter
+  flutter_native_splash: ^2.4.6
   font_awesome_flutter: ^10.8.0
   google_sign_in: ^6.3.0
   hyperlink: ^0.0.5
@@ -32,3 +33,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+flutter_native_splash:
+  color: "#ffffff" # Background color
+  image: assets/icon.png # Path to your splash image
+
+  android_12:
+    image: assets/icon.png
+    icon_background_color: "#ffffff"
+
+  web: false
