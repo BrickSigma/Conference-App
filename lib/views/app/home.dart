@@ -1,4 +1,5 @@
 import 'package:conference_app/models/schedule_provider.dart';
+import 'package:conference_app/models/theme_provider.dart';
 import 'package:conference_app/models/user_model.dart';
 import 'package:conference_app/utils/utils.dart';
 import 'package:conference_app/views/components/qr_code_scan.dart';
@@ -90,6 +91,15 @@ class HomeView extends StatelessWidget {
                         onPressed: () => _showQrCodeScanner(context),
                         label: Text("QR Code Connect"),
                         icon: Icon(Icons.qr_code_scanner_rounded),
+                      ),
+                      SizedBox(width: 12),
+                      Consumer<ThemeProvider>(
+                        builder:
+                            (context, theme, child) => FilledButton.icon(
+                              onPressed: () => theme.flipColorTheme(),
+                              label: Text(theme.lightTheme ? "Dark Mode" : "Light Mode"),
+                              icon: Icon(theme.lightTheme ? Icons.dark_mode : Icons.light_mode),
+                            ),
                       ),
                     ],
                   ),

@@ -1,4 +1,4 @@
-package com.example.conference_app
+package com.dreamteam.strathconference
 
 import io.flutter.embedding.android.FlutterActivity
 
