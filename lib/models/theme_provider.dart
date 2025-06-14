@@ -5,12 +5,11 @@ class ThemeProvider extends ChangeNotifier {
   bool lightTheme = true; // Default to light color theme.
 
   void flipColorTheme() async {
-    lightTheme != lightTheme;
-
-    notifyListeners();
+    lightTheme = !lightTheme;
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool("lightTheme", lightTheme);
+    notifyListeners();
   }
 
   /// Get the selected color theme.

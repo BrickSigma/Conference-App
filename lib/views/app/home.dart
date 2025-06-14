@@ -85,20 +85,27 @@ class HomeView extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   SizedBox(height: 12),
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FilledButton.icon(
                         onPressed: () => _showQrCodeScanner(context),
                         label: Text("QR Code Connect"),
                         icon: Icon(Icons.qr_code_scanner_rounded),
                       ),
-                      SizedBox(width: 12),
+                      SizedBox(height: 12),
                       Consumer<ThemeProvider>(
                         builder:
                             (context, theme, child) => FilledButton.icon(
                               onPressed: () => theme.flipColorTheme(),
-                              label: Text(theme.lightTheme ? "Dark Mode" : "Light Mode"),
-                              icon: Icon(theme.lightTheme ? Icons.dark_mode : Icons.light_mode),
+                              label: Text(
+                                theme.lightTheme ? "Dark Mode" : "Light Mode",
+                              ),
+                              icon: Icon(
+                                theme.lightTheme
+                                    ? Icons.dark_mode
+                                    : Icons.light_mode,
+                              ),
                             ),
                       ),
                     ],
