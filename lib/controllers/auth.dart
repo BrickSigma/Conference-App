@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conference_app/models/login_provider.dart';
 import 'package:conference_app/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -19,7 +20,13 @@ Future<bool> googleSignIn(BuildContext context) async {
     );
 
     // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount? googleUser =
+        await GoogleSignIn(
+          clientId:
+              kIsWeb
+                  ? "799578770918-qp9o00oln61mdr4mobd66sohhf36c7b0.apps.googleusercontent.com"
+                  : null,
+        ).signIn();
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =
@@ -53,6 +60,7 @@ Future<bool> googleSignIn(BuildContext context) async {
 
     return true;
   } catch (e) {
+    print(e);
     return false;
   }
 }
